@@ -8,8 +8,7 @@ cli
   .description('Read from a provided file and combine its information with data from the API to another file')
   .action(async () => {
     const options = cli.opts()
-    // console.log(`${JSON.stringify(options)}`)
-    if (options.in && options.out) await parse.readFile(options.in)
+    if (options.in && options.out) await parse.processFile(options.in, options.out)
   })
 
 cli.parse(process.argv)
