@@ -4,8 +4,8 @@ const pkg = require('../package.json')
 const conf = require('../commands/config')
 
 cli
-  .option('-i, --init', 'initialise configuration')
-  .option('-r, --reset', 'reset configuration')
+  .option('-s, --init', 'initialize configuration')
+  .option('-u, --reset', 'reset configuration')
   .description('Initialize environment config or reset previously set configuration')
   .action(async () => {
     const options = cli.opts()

@@ -7,7 +7,7 @@
   },
   "main": "index.js",
   "scripts": {
-    "test": "mocha --recursive"
+    "test": "nyc mocha --recursive"
   },
   "keywords": [],
   "author": "",
@@ -27,11 +27,14 @@
     "eslint-plugin-node": "11.1.0",
     "eslint-plugin-promise": "4.2.1",
     "mocha": "8.2.1",
+    "nyc": "15.1.0",
     "sinon": "9.2.4"
   },
   "dependencies": {
     "commander": "7.0.0",
     "configstore": "5.0.1",
-    "inquirer": "7.3.3"
+    "inquirer": "7.3.3",
+    "neat-csv": "6.0.1",
+    "strip-bom-stream": "4.0.0"
   }
 }
