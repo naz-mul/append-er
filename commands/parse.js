@@ -7,31 +7,31 @@ const outputData = []
 
 const parse = {
   async processFile (inputFile, outputFile) {
-    const manager = new FileParsingStrategy()
-    manager.addParser(new CsvFileProcessor(), 'csv')
+    const parsingStrategy = new FileParsingStrategy()
+    parsingStrategy.addParser(new CsvFileProcessor(), 'csv')
     // TODO remove = from inputFile
     try {
-      const data = await manager.read(inputFile)
+      const data = await parsingStrategy.read(inputFile)
       console.info('File successfully read')
       const api = new RestApi(await this.getConfig())
       for (let i = 0; i < Array.from(data).length; i++) {
         if (data[i].accountId.trim().length > 0) {
-          console.log(data[i].accountId)
           const response = await api.getAccount(data[i].accountId)
-          const account = response.data
           outputData.push({
-            'Account ID': account.account_id,
+            'Account ID': response.data.account_id,
             'First Name': data[i].firstName,
             'Created On': data[i].createdOn,
-            Status: account.status,
-            'Status Set On': account.created_on
+            Status: response.data.status,
+            'Status Set On': response.data.created_on
           })
         }
       }
       if (outputData.length > 0) {
-        console.log(`${JSON.stringify(outputData)}`)
-        await manager.write(outputData, outputFile)
+        await parsingStrategy.write(outputData, outputFile)
+        console.info('File successfully written')
+        return
       }
+      console.info('Nothing to write')
     } catch (err) {
       console.error(`${err}`)
     }
