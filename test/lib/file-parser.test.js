@@ -7,7 +7,7 @@ const CsvFileProcessor = require('../../lib/file-parser').CsvFileProcessor
 const path = require('path')
 
 chai.use(chaiAsPromised)
-// chai.use(dirtyChai)
+chai.use(dirtyChai)
 
 describe('the file parser', () => {
   it('should get the parser', () => {
@@ -45,7 +45,7 @@ describe('the file parser', () => {
     return expect(parsingStrategy.read(path.resolve(__dirname, '../resources/inputt.csv')))
       .to.eventually.be.rejected
       .and.be.an.instanceOf(Error)
-      .and.have.property('message', 'Error: ENOENT: no such file or directory, open \'/home/fexco.ie/nalam/projects/append-er/test/resources/inputt.csv\'')
+      .and.have.property('message', `Error: ENOENT: no such file or directory, open '${path.resolve(__dirname, '../resources/inputt.csv')}'`)
   })
 
   it('should not read csv file with incorrect amount of headers', async () => {
@@ -96,5 +96,23 @@ describe('the file parser', () => {
     parsingStrategy.addParser(new CsvFileProcessor(), 'csv')
     const data = await parsingStrategy.write(outputData, path.resolve(__dirname, '../resources/output.csv'))
     expect(data.writable).to.be.true
+  })
+
+  it('should throw error for invalid write parser', () => {
+    const parsingStrategy = new FileParsingStrategy()
+    parsingStrategy.addParser({}, 'txt')
+    return expect(parsingStrategy.write([], path.resolve(__dirname, '../resources/input.csv')))
+      .to.eventually.be.rejected
+      .and.be.an.instanceOf(Error)
+      .and.have.property('message', 'No file parser found')
+  })
+
+  it('should throw error for invalid write file type', () => {
+    const parsingStrategy = new FileParsingStrategy()
+    parsingStrategy.addParser(new CsvFileProcessor(), 'csv')
+    return expect(parsingStrategy.write([], path.resolve(__dirname, '../resources/input.txt')))
+      .to.eventually.be.rejected
+      .and.be.an.instanceOf(Error)
+      .and.have.property('message', 'File type is not supported')
   })
 })

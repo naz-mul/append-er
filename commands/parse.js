@@ -34,6 +34,7 @@ const parse = {
       console.info('Nothing to write')
     } catch (err) {
       console.error(`${err}`)
+      process.exitCode = 1
     }
   },
   async getConfig () {

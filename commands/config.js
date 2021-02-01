@@ -8,7 +8,7 @@ const config = {
       const [env, baseUri] = await conf.getEnvironmentConfig()
       if (env && baseUri) {
         console.error('Environment config already exists')
-        process.exit(1)
+        process.exitCode = 1
       }
     } catch {
       const choices = await inquirer.prompt([
@@ -38,7 +38,8 @@ const config = {
         await conf.deleteEnvironmentConfig(env, baseUri)
       }
     } catch {
-      console.info('No configurations found')
+      console.error('No configurations found')
+      process.exitCode = 1
     }
   }
 }
